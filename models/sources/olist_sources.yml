@@ -1,0 +1,12 @@
+sources:
+  - name: olist
+    database: "{{ target.database }}"
+    schema: raw
+    tables:
+      - name: olist_customers
+      - name: olist_orders
+      - name: olist_order_items
+      - name: olist_products
+      - name: olist_sellers
+      - name: olist_order_payments
+      - name: olist_order_reviews
