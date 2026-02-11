@@ -62,6 +62,7 @@ models:
     columns:
       - name: order_id
         data_tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('stg_olist_orders')
@@ -69,4 +70,17 @@ models:
       - name: payment_sequential
         data_tests:
           - not_null
+
+  - name: stg_olist_order_reviews
+    columns:
+      - name: review_id
+        data_tests:
+          - not_null
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
 
