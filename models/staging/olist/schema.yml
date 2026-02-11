@@ -50,3 +50,10 @@ models:
         data_tests:
           - unique 
           - not_null
+
+  - name: stg_olist_sellers
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique 
+          - not_null
