@@ -1,0 +1,26 @@
+models: 
+  - name: stg_olist_customers
+    columns:
+      - name: customer_id
+        description: Primary key for this table
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        data_tests:
+          - not_null
+
+  - name: stg_olist_orders
+    columns:
+      - name: order_id
+        description: Primary key for this table
+        data_tests:
+          - unique 
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_customers')
+                field: customer_id
