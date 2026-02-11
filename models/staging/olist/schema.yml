@@ -57,3 +57,16 @@ models:
         data_tests:
           - unique 
           - not_null
+
+  - name: stg_olist_order_payments
+    columns:
+      - name: order_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
+      - name: payment_sequential
+        data_tests:
+          - not_null
+
