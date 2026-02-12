@@ -1,0 +1,41 @@
+models:
+  - name: fact_order_items
+    description: "Fact table at order item grain (1 row per order_id + order_item_id)."
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
+      - name: order_item_id
+        data_tests:
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_customers')
+                field: customer_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_products')
+                field: product_id
+      - name: seller_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_sellers')
+                field: seller_id
+      - name: price
+        data_tests:
+          - not_null
+      - name: freight_value
+        data_tests:
+          - not_null
