@@ -39,3 +39,19 @@ models:
       - name: freight_value
         data_tests:
           - not_null
+
+  - name: dim_customers
+    description: "Customer dimension (1 row per customer_id)."
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+  - name: dim_products
+    description: "Product dimension (1 row per product_id)."
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+  - name: dim_sellers
+    description: "Seller dimension (1 row per seller_id)."
+    columns:
+      - name: seller_id
+        tests: [not_null, unique]
