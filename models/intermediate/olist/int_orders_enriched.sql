@@ -31,7 +31,7 @@ select
     c.customer_state,
 
     o.order_status,
-    o.order_purchase_timestamp,
+    o.order_purchase_date,
     o.order_approved_at,
     o.order_delivered_carrier_date,
     o.order_delivered_customer_date,
