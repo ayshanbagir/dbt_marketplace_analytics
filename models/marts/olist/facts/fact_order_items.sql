@@ -3,16 +3,8 @@ select
     order_item_id,
 
     customer_id,
-    customer_unique_id,
-    customer_state,
-    customer_city,
-
     product_id,
-    product_category_name,
-
     seller_id,
-    seller_state,
-    seller_city,
 
     order_status,
     order_purchase_date,
