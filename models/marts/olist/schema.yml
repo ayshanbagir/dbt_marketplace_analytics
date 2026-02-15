@@ -51,6 +51,12 @@ models:
         tests: [not_null]
       - name: order_purchase_date
         tests: [not_null]
+      - name: delivery_days
+        description: "Days from purchase to customer delivery (null if not delivered)."
+      - name: approval_lag_minutes
+        description: "Minutes from purchase to approval (null if not approved)."
+      - name: is_late_delivery
+        description: "True if delivered after estimated delivery date."
 
   - name: dim_customers
     description: "Customer dimension (1 row per customer_id)."
