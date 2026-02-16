@@ -1,3 +1,9 @@
+{{ config(
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key='order_id'
+) }}
+
 with orders as (
   select
     order_id,
@@ -74,3 +80,8 @@ select
 from orders o
 left join rollup r
   on o.order_id = r.order_id
+
+{% if is_incremental() %}
+where o.order_purchase_date >= dateadd(day, -7, (select max(order_purchase_date) from {{ this }}))
+{{ log('Loading ' ~ this ~ ' incrementally (all missing dates)', info=True)}}
+{% endif %}
