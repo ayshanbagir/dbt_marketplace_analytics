@@ -1,6 +1,10 @@
 models:
   - name: fact_order_items
-    description: "Fact table at order item grain (1 row per order_id + order_item_id)."
+    description: >
+      Item-level fact table with one row per (order_id, order_item_id).
+      Represents purchased products within orders, including seller and product keys,
+      pricing, freight, and shipping deadlines. Suitable for product and seller performance analysis.
+
     columns:
       - name: order_id
         data_tests:
@@ -42,7 +46,10 @@ models:
               arguments:
                 expression: ">= 0"
   - name: fact_orders
-    description: "Order-grain fact table (1 row per order_id)."
+    description: >
+      Order-level fact table containing one row per order.
+      Includes customer, order timestamps, order status,
+      and aggregated monetary metrics.
     tests:
       # purchase must be <= delivered (when delivered exists)
       - dbt_utils.expression_is_true:
