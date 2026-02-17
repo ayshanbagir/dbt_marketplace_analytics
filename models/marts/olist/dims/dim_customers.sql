@@ -4,4 +4,5 @@ select
   customer_zip_code_prefix,
   customer_city,
   customer_state
-from {{ ref('stg_olist_customers') }}
+from {{ ref('dim_customers_snapshot') }}
+where dbt_valid_to is null
