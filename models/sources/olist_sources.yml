@@ -4,9 +4,24 @@ sources:
     schema: raw
     tables:
       - name: olist_customers
+        columns:
+          - name: customer_state
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^[A-Z]{2}$"
       - name: olist_orders
       - name: olist_order_items
       - name: olist_products
       - name: olist_sellers
+        columns:
+          - name: seller_state
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^[A-Z]{2}$"
       - name: olist_order_payments
       - name: olist_order_reviews
+      

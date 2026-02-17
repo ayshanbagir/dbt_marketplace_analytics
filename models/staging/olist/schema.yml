@@ -83,4 +83,11 @@ models:
               arguments:
                 to: ref('stg_olist_orders')
                 field: order_id
+      - name: review_score
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 1
+                max_value: 5
 
