@@ -3,4 +3,5 @@ select
   seller_zip_code_prefix,
   seller_city,
   seller_state
-from {{ ref('stg_olist_sellers') }}
+from {{ ref('dim_sellers_snapshot') }}
+where dbt_valid_to is null

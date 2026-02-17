@@ -8,4 +8,5 @@ select
   product_length_cm,
   product_height_cm,
   product_width_cm
-from {{ ref('stg_olist_products') }}
+from {{ ref('dim_products_snapshot') }}
+where dbt_valid_to is null
