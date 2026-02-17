@@ -1,3 +1,5 @@
+{{ config(tags=['fct']) }}
+
 {{ config(
     materialized='incremental',
     incremental_strategy='merge',

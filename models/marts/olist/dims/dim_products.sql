@@ -1,3 +1,5 @@
+{{ config(tags=['dim']) }}
+
 select
   product_id,
   product_category_name,

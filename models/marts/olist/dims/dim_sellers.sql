@@ -1,3 +1,5 @@
+{{ config(tags=['dim']) }}
+
 select
   seller_id,
   seller_zip_code_prefix,
