@@ -18,22 +18,31 @@ This project demonstrates end-to-end ownership of data modeling, warehouse optim
 ## 🏗 Architecture & Modeling Strategy
 
 The project follows a modular, layered dbt architecture aligned with analytics engineering best practices:
-
+<pre> <code>
 models/
+├── sources/
 ├── staging/
-├── intermediate/
+├── intermediate/   
 ├── mart/
-│ ├── dim/
-│ └── fact/
+│ ├── dim/          
+│ └── fact/         
 snapshots/
 macros/
-tests/
+tests/</code> </pre>
 
+---
+
+## 🔹 Source Layer
+
+- Raw table definitions
+- Schema documentation
+- Column-level descriptions
+
+Provides structured entry points for upstream data.
 
 ### 🔹 Staging Layer
-- Source configuration & documentation
+- Column renaming & normalization
 - Data type standardization
-- Column normalization
 - Lightweight transformations
 
 ### 🔹 Intermediate Layer
@@ -44,7 +53,6 @@ tests/
 ### 🔹 Mart Layer (Star Schema)
 - Dimension and fact table design
 - Clearly defined grain per table
-- Surrogate key generation
 - Analytics-ready datasets
 
 The mart layer supports efficient reporting and scalable analytics workloads.
@@ -71,8 +79,7 @@ Fact tables are built using incremental strategies to:
 - Process only new/updated records  
 - Improve pipeline efficiency  
 
-### Schema Isolation
-Custom macro:
+### Custom macro:
 
 - `generate_schema_name` – dynamic schema generation for environment-aware deployments
 
@@ -84,16 +91,26 @@ Demonstrates understanding of scalable multi-environment workflows.
 
 Comprehensive testing strategy:
 
+### Built-in dbt Tests
 - `not_null`
 - `unique`
 - Relationship tests
-- Snapshot validation
-- Custom tests
 
-Ensures:
-- Referential integrity  
-- Proper table grain  
-- Reliable downstream consumption  
+### dbt Packages
+- `dbt_utils`
+- `dbt_expectations`
+
+### Custom SQL Tests
+- Custom validation logic inside `/tests`
+- Grain validation checks
+- Business rule enforcement
+
+### Documentation
+- Model-level descriptions
+- Column-level descriptions
+- YAML-based metadata definitions
+
+Ensures reliable, well-documented, production-ready data models.
 
 ---
 
