@@ -1,0 +1,17 @@
+snapshots:
+  - name: dim_products_snapshot
+    relation: ref('stg_olist_products')
+    config:
+      schema: snapshots
+      unique_key: product_id
+      strategy: check
+      check_cols:
+        - product_category_name
+        - product_name_length
+        - product_description_length
+        - product_photos_qty
+        - product_weight_g
+        - product_length_cm
+        - product_height_cm
+        - product_width_cm
+      hard_deletes: invalidate

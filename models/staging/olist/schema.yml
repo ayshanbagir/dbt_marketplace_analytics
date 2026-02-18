@@ -1,0 +1,138 @@
+models: 
+  - name: stg_olist_customers
+    description: >
+      Staging model for customer data.
+      Cleans and standardizes the raw olist_customers source table.
+      Converts empty zip code values to NULL and casts zip code prefix to integer.
+
+    columns:
+      - name: customer_id
+        description: Primary key for this table
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        data_tests:
+          - not_null
+
+  - name: stg_olist_orders
+    description: >
+      Staging model for raw order data.
+      Standardizes timestamp fields by converting empty string values to NULL
+      and casting them to TIMESTAMP_NTZ.
+      No business logic or filtering is applied at this stage.
+
+    columns:
+      - name: order_id
+        description: Primary key for this table
+        data_tests:
+          - unique 
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_customers')
+                field: customer_id
+
+  - name: stg_olist_order_items
+    description: >
+      Staging model for raw order item data.
+      One row represents a single product within an order.
+      Converts empty string values to NULL and casts timestamp and monetary
+      fields to appropriate Snowflake data types.
+      No aggregation or business logic is applied.
+
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
+      - name: order_item_id
+        data_tests:
+          - not_null
+      - name: product_id
+        data_tests:
+          - not_null
+      - name: seller_id
+        data_tests:
+          - not_null
+
+  - name: stg_olist_products
+    description: >
+      Staging model for raw product data.
+      Standardizes column names, corrects spelling inconsistencies,
+      converts empty string values to NULL, and casts numeric attributes
+      to INTEGER data types.
+      No business aggregation or filtering is applied.
+
+    columns:
+      - name: product_id
+        data_tests:
+          - unique 
+          - not_null
+
+  - name: stg_olist_sellers
+    description: >
+      Staging model for raw seller data.
+      Converts empty string values to NULL and casts zip code prefix
+      to INTEGER. No filtering or business transformations are applied.
+
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique 
+          - not_null
+
+  - name: stg_olist_order_payments
+    description: >
+      Staging model for raw order payment data.
+      One order may contain multiple payment records.
+      Converts empty string values to NULL and casts numeric fields
+      to appropriate data types. No aggregation or business logic is applied
+
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
+      - name: payment_sequential
+        data_tests:
+          - not_null
+
+  - name: stg_olist_order_reviews
+    description: >
+      Staging model for raw order review data.
+      Converts empty string values to NULL and casts review score
+      and timestamp fields to appropriate data types.
+      No deduplication or aggregation is applied at this stage.
+
+    columns:
+      - name: review_id
+        description: >
+          Identifier of the review.
+          Not guaranteed to be unique across the dataset.
+        data_tests:
+          - not_null
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist_orders')
+                field: order_id
+      - name: review_score
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 1
+                max_value: 5
+

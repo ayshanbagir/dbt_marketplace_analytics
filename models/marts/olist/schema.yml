@@ -1,0 +1,115 @@
+models:
+  - name: fact_order_items
+    description: >
+      Item-level fact table with one row per (order_id, order_item_id).
+      Represents purchased products within orders, including seller and product keys,
+      pricing, freight, and shipping deadlines. Suitable for product and seller performance analysis.
+
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: order_item_id
+        data_tests:
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: seller_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_sellers')
+                field: seller_id
+      - name: price
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: freight_value
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+  - name: fact_orders
+    description: >
+      Order-level fact table containing one row per order.
+      Includes customer, order timestamps, order status,
+      and aggregated monetary metrics.
+    tests:
+      # purchase must be <= delivered (when delivered exists)
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "order_delivered_customer_date is null or order_purchase_date <= order_delivered_customer_date"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: order_status
+        tests: 
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['delivered','shipped','canceled','invoiced','processing','unavailable','approved','created']
+      - name: order_purchase_date
+        tests: [not_null]
+      - name: delivery_days
+        description: "Days from purchase to customer delivery (null if not delivered)."
+      - name: approval_lag_minutes
+        description: "Minutes from purchase to approval (null if not approved)."
+      - name: is_late_delivery
+        description: "True if delivered after estimated delivery date."
+
+  - name: dim_customers
+    description: "Customer dimension (1 row per customer_id)."
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_olist_customers')
+          config:
+            severity: warn
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+  - name: dim_products
+    description: "Product dimension (1 row per product_id)."
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_olist_products')
+          config:
+            severity: warn
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+  - name: dim_sellers
+    description: "Seller dimension (1 row per seller_id)."
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_olist_sellers')
+          config:
+            severity: warn
+    columns:
+      - name: seller_id
+        tests: [not_null, unique]

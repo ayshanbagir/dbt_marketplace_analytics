@@ -1,0 +1,58 @@
+sources:
+  - name: olist
+    description: >
+      Raw Olist e-commerce dataset loaded from CSV files into Snowflake.
+      Represents transactional marketplace data from Brazil.
+
+    database: "{{ target.database }}"
+    schema: raw
+
+    tables:
+      - name: olist_customers
+        description: >
+          Raw customer dataset containing demographic and geographic
+          information for marketplace customers.
+        columns:
+          - name: customer_state
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^[A-Z]{2}$"
+
+      - name: olist_orders
+        description: >
+          Raw order-level transactional data.
+          Contains lifecycle timestamps and order status information.
+
+      - name: olist_order_items
+        description: >
+          Raw item-level details for each order.
+          One row represents one product within an order.
+
+      - name: olist_products
+        description: >
+          Raw product dimension data including product category
+          and physical characteristics.
+
+      - name: olist_sellers
+        description: >
+          Raw seller dimension data including geographic information.
+        columns:
+          - name: seller_state
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^[A-Z]{2}$"
+
+      - name: olist_order_payments
+        description: >
+          Raw payment transaction data associated with orders.
+          An order may contain multiple payment records.
+
+      - name: olist_order_reviews
+        description: >
+          Raw customer review data for orders.
+          Contains review scores and review submission timestamps.
+      
