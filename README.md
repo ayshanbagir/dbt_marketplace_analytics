@@ -1,4 +1,4 @@
-# 📊 Modern Analytics Engineering Pipeline (dbt + Snowflake + Airflow)
+# 📊 Modern Analytics Engineering Pipeline (dbt + Snowflake + Dagster)
 
 Production-style analytics engineering project implementing a scalable transformation pipeline on marketplace data using modern data stack principles.
 
@@ -10,7 +10,7 @@ This project demonstrates end-to-end ownership of data modeling, warehouse optim
 
 - **Cloud Data Warehouse:** Snowflake  
 - **Transformation Framework:** dbt  
-- **Orchestration:** Airflow  
+- **Orchestration:** Dagster  
 - **Languages:** SQL, Jinja  
 
 ---
@@ -114,9 +114,9 @@ Ensures reliable, well-documented, production-ready data models.
 
 ---
 
-## 🚀 Orchestration with Airflow
+## 🚀 Orchestration with Dagster
 
-Airflow is used to:
+Dagster is used to:
 
 - Trigger dbt model runs  
 - Execute snapshots  
